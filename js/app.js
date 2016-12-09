@@ -38,7 +38,7 @@ var Maze = function(config) {
 	// funcoes para desenhar o tabuleiro
 	this.strkW = 2;
 	this.strkoffst = ceil(this.strkW / 2);
-	this.spriteSVG = loadShape("icones.svg");
+	this.spriteSVG = loadShape("../img/icones.svg");
 
 	this.drawCorner = function() {
 		arc(0, 0, this.tileSize, this.tileSize, PI, 1.5 * PI);
@@ -600,7 +600,7 @@ Pacman.prototype.update = function (data) {
 /////////////////////////////////
 var Protester = function(config) {
 	this.tileSize = config.tileSize;
-	this.spriteSVG = loadShape("protester.svg");
+	this.spriteSVG = loadShape("../img/protester.svg");
 	this.sizeExtra = (this.spriteSVG.width - this.tileSize) / 2;
 	this.size = this.tileSize + this.sizeExtra;
 
