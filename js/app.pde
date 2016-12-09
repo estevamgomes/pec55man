@@ -761,8 +761,6 @@ Protester.prototype.update = function (data) {
 ///// MAIN PROGRAM /////
 ////////////////////////
 
-/* @pjs preload="../img/protester-01.png"; */
-
 var tileSize = 20;
 var paused = false;
 var gameover = false;

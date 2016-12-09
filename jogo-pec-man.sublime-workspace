@@ -519,38 +519,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "index.html",
-			"settings":
-			{
-				"buffer_size": 2009,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/app.pde",
-			"settings":
-			{
-				"buffer_size": 23871,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "js/botao.pde",
-			"settings":
-			{
-				"buffer_size": 2566,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "css/main.css",
-			"settings":
-			{
-				"buffer_size": 5953,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -732,8 +700,11 @@
 	},
 	"file_history":
 	[
-		"/D/Dropbox/ocupa ead/jogo - pec man/app/img/icones.svg",
+		"/D/github/pec55man/ (2).gitattributes",
+		"/D/github/pec55man/.gitignore",
+		"/D/github/pec55man/.gitattributes",
 		"/D/Dropbox/ocupa ead/jogo - pec man/app/img/protester.svg",
+		"/D/Dropbox/ocupa ead/jogo - pec man/app/img/icones.svg",
 		"/D/Dropbox/ocupa ead/jogo - pec man/app/js/main.js",
 		"/D/Dropbox/ocupa ead/jogo - pec man/app/index.pde",
 		"/C/Users/Estevam/Downloads/Michel Foucault - French Documentary - arte-france 17.pt-br.vtt",
@@ -856,10 +827,7 @@
 		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-lagear.html",
 		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-marcador.html",
 		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-muitas-vozes.html",
-		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-noite-flutuante.html",
-		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-raul-misturada.html",
-		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-rio-beaga.html",
-		"/D/Dropbox/www/portfolio/projeto-noite-flutuante.php"
+		"/D/Dropbox/Aplicativos/Pancake.io/portfolio/projeto-noite-flutuante.html"
 	],
 	"find":
 	{
@@ -867,7 +835,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"D:\\Dropbox\\led - site idec transporte\\layout",
@@ -881,6 +849,15 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"arc",
+			"paused",
+			"hitTest",
+			"pause",
+			"flag",
+			"score",
+			"moeda",
+			"proteste",
+			"pacman",
 			"paused",
 			"scale",
 			"24",
@@ -999,16 +976,7 @@
 			"hot",
 			"apple",
 			"yahoo",
-			"lateral",
-			"table",
-			"<i class=\"icon fa fa-arrow-right\" aria-hidden=\"true\"></i>",
-			"fa-",
-			"\\<i",
-			"header",
-			"after",
-			"arrow",
-			"@texto-max-width",
-			"80rem"
+			"lateral"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1034,128 +1002,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "index.html",
-					"settings":
-					{
-						"buffer_size": 2009,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								522,
-								522
-							]
-						],
-						"settings":
-						{
-							"is_init_dirty_state": false,
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "js/app.pde",
-					"settings":
-					{
-						"buffer_size": 23871,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5369,
-								5369
-							]
-						],
-						"settings":
-						{
-							"is_init_dirty_state": false,
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/Processing/Syntaxes/Processing.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "js/botao.pde",
-					"settings":
-					{
-						"buffer_size": 2566,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2161,
-								2043
-							]
-						],
-						"settings":
-						{
-							"is_init_dirty_state": false,
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/Processing/Syntaxes/Processing.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1308.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "css/main.css",
-					"settings":
-					{
-						"buffer_size": 5953,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2148,
-								2148
-							]
-						],
-						"settings":
-						{
-							"is_init_dirty_state": false,
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 540.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
