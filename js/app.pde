@@ -1,4 +1,5 @@
 debug = false;
+onlymap = false;
 
 ////////////////////////////
 ///// Maze Object Type /////
@@ -57,6 +58,8 @@ var Maze = function(config) {
 	this.strkW = 2; // espessura da linha da parede
 	this.strkoffst = ceil(this.strkW / 2); // distancia que a linha deve ficar para não ser cortada
 	this.spriteSVG = loadShape("img/icones.svg"); // icones usados como bônus
+	this.mapImg = loadShape("img/map.svg");; // mapa
+
 	this.colors = config.colors;
 
 	this.drawCorner = function() {
@@ -114,6 +117,8 @@ Maze.prototype.updateTile = function(tilex, tiley, value) {
 }
 
 Maze.prototype.draw = function() {
+	shapeMode(CORNER);
+	if(!onlymap) shape(this.mapImg, 0, 0);
 
 	for (i = 0; i < this.tiles.length; i++) {
 		for (j = 0; j < this.tiles[i].length; j++) {
@@ -144,152 +149,156 @@ Maze.prototype.draw = function() {
 			translate(tileCenterX, tileCenterY);
 			shapeMode(CORNER);
 			var corPontos = this.colors.pink;
-			switch(this.tiles[i][j]) {
-				// moeda
-				case 1:
-					fill(this.colors.blue);
-					textSize(8);
-					textAlign(CENTER, CENTER);
-					text("$", 0, 0);
-					break;
 
-				// educacao
-				case 2:
-					noStroke();
-					fill(corPontos);
-					this.spriteSVG.getChild('educacao').disableStyle();
-					shape(this.spriteSVG.getChild('educacao'), -this.spriteSVG.width / 2, -this.spriteSVG.height / 2);
-					break;
+			// debug
+			if((!onlymap && this.tiles[i][j] <= 8) || (onlymap && this.tiles[i][j] > 8)) {
+				switch(this.tiles[i][j]) {
+					// moeda
+					case 1:
+						fill(this.colors.blue);
+						textSize(8);
+						textAlign(CENTER, CENTER);
+						text("$", 0, 0);
+						break;
 
-				// saude
-				case 3:
-					noStroke();
-					fill(corPontos);
-					this.spriteSVG.getChild('saude').disableStyle();
-					shape(this.spriteSVG.getChild('saude'), -this.spriteSVG.width / 2, -this.spriteSVG.height / 2);
-					break;
+					// educacao
+					case 2:
+						noStroke();
+						fill(corPontos);
+						this.spriteSVG.getChild('educacao').disableStyle();
+						shape(this.spriteSVG.getChild('educacao'), -this.spriteSVG.width / 2, -this.spriteSVG.height / 2);
+						break;
 
-				// saida do O
-				case 9:
-					stroke(this.colors.pink);
-					rotate(radians(90));
-					this.drawWall();
-					break;
+					// saude
+					case 3:
+						noStroke();
+						fill(corPontos);
+						this.spriteSVG.getChild('saude').disableStyle();
+						shape(this.spriteSVG.getChild('saude'), -this.spriteSVG.width / 2, -this.spriteSVG.height / 2);
+						break;
 
-				// parede dupla
-				case 23: // parede dupla esquerda
-					this.drawDoubleWall();
-					break;
-				case 24: // parede dupla superior
-					rotate(radians(90));
-					this.drawDoubleWall();
-					break;
-				case 25: // parede dupla direita
-					rotate(radians(180));
-					this.drawDoubleWall();
-					break;
-				case 26: // parede dupla inferior
-					rotate(radians(270));
-					this.drawDoubleWall();
-					break;
-				case 234: // parede dupla superior esquerda
-					this.drawDoubleCorner();
-					break;
-				case 236: // parede dupla inferior esquerda
-					rotate(radians(270));
-					this.drawDoubleCorner();
-					break;
-				case 256: // parede dupla inferior direita
-					rotate(radians(180));
-					this.drawDoubleCorner();
-					break;
-				case 245: // parede dupla superior direita
-					rotate(radians(90));
-					this.drawDoubleCorner();
-					break;
+					// saida do O
+					case 9:
+						stroke(this.colors.pink);
+						rotate(radians(90));
+						this.drawWall();
+						break;
 
-				// parede dupla com lateral direita fechada
-				case 33: // parede dupla esquerda
-					this.drawEndDoubleWall();
-					break;
-				case 34: // parede dupla superior
-					rotate(radians(90));
-					this.drawEndDoubleWall();
-					break;
-				case 35: // parede dupla direita
-					rotate(radians(180));
-					this.drawEndDoubleWall();
-					break;
-				case 36: // parede dupla inferior
-					rotate(radians(270));
-					this.drawEndDoubleWall();
-					break;
+					// parede dupla
+					case 23: // parede dupla esquerda
+						this.drawDoubleWall();
+						break;
+					case 24: // parede dupla superior
+						rotate(radians(90));
+						this.drawDoubleWall();
+						break;
+					case 25: // parede dupla direita
+						rotate(radians(180));
+						this.drawDoubleWall();
+						break;
+					case 26: // parede dupla inferior
+						rotate(radians(270));
+						this.drawDoubleWall();
+						break;
+					case 234: // parede dupla superior esquerda
+						this.drawDoubleCorner();
+						break;
+					case 236: // parede dupla inferior esquerda
+						rotate(radians(270));
+						this.drawDoubleCorner();
+						break;
+					case 256: // parede dupla inferior direita
+						rotate(radians(180));
+						this.drawDoubleCorner();
+						break;
+					case 245: // parede dupla superior direita
+						rotate(radians(90));
+						this.drawDoubleCorner();
+						break;
 
-				// parede dupla com lateral esquerda fechada
-				case 43: // parede dupla esquerda
-					this.drawEndDoubleWallB();
-					break;
-				case 44: // parede dupla superior
-					rotate(radians(90));
-					this.drawEndDoubleWallB();
-					break;
-				case 45: // parede dupla direita
-					rotate(radians(180));
-					this.drawEndDoubleWallB();
-					break;
-				case 46: // parede dupla inferior
-					rotate(radians(270));
-					this.drawEndDoubleWallB();
-					break;
+					// parede dupla com lateral direita fechada
+					case 33: // parede dupla esquerda
+						this.drawEndDoubleWall();
+						break;
+					case 34: // parede dupla superior
+						rotate(radians(90));
+						this.drawEndDoubleWall();
+						break;
+					case 35: // parede dupla direita
+						rotate(radians(180));
+						this.drawEndDoubleWall();
+						break;
+					case 36: // parede dupla inferior
+						rotate(radians(270));
+						this.drawEndDoubleWall();
+						break;
 
-				// parede dupla reduzida
-				case 334: // parede dupla superior esquerda
-					this.drawDoubleCornerB();
-					break;
-				case 336: // parede dupla inferior esquerda
-					rotate(radians(270));
-					this.drawDoubleCornerB();
-					break;
-				case 356: // parede dupla inferior direita
-					rotate(radians(180));
-					this.drawDoubleCornerB();
-					break;
-				case 345: // parede dupla superior direita
-					rotate(radians(90));
-					this.drawDoubleCornerB();
-					break;
+					// parede dupla com lateral esquerda fechada
+					case 43: // parede dupla esquerda
+						this.drawEndDoubleWallB();
+						break;
+					case 44: // parede dupla superior
+						rotate(radians(90));
+						this.drawEndDoubleWallB();
+						break;
+					case 45: // parede dupla direita
+						rotate(radians(180));
+						this.drawEndDoubleWallB();
+						break;
+					case 46: // parede dupla inferior
+						rotate(radians(270));
+						this.drawEndDoubleWallB();
+						break;
 
-				// parede simples
-				case 13: // parede esquerda
-					this.drawWall();
-					break;
-				case 14: // parede superior
-					rotate(radians(90));
-					this.drawWall();
-					break;
-				case 15: // parede direita
-					rotate(radians(180));
-					this.drawWall();
-					break;
-				case 16: // parede inferior
-					rotate(radians(270));
-					this.drawWall();
-					break;
-				case 134: // parede superior esquerda
-					this.drawCorner();
-					break;
-				case 136: // parede inferior esquerda
-					rotate(radians(270));
-					this.drawCorner();
-					break;
-				case 156: // parede inferior direita
-					rotate(radians(180));
-					this.drawCorner();
-					break;
-				case 145: // parede superior direita
-					rotate(radians(90));
-					this.drawCorner();
-					break;
+					// parede dupla reduzida
+					case 334: // parede dupla superior esquerda
+						this.drawDoubleCornerB();
+						break;
+					case 336: // parede dupla inferior esquerda
+						rotate(radians(270));
+						this.drawDoubleCornerB();
+						break;
+					case 356: // parede dupla inferior direita
+						rotate(radians(180));
+						this.drawDoubleCornerB();
+						break;
+					case 345: // parede dupla superior direita
+						rotate(radians(90));
+						this.drawDoubleCornerB();
+						break;
+
+					// parede simples
+					case 13: // parede esquerda
+						this.drawWall();
+						break;
+					case 14: // parede superior
+						rotate(radians(90));
+						this.drawWall();
+						break;
+					case 15: // parede direita
+						rotate(radians(180));
+						this.drawWall();
+						break;
+					case 16: // parede inferior
+						rotate(radians(270));
+						this.drawWall();
+						break;
+					case 134: // parede superior esquerda
+						this.drawCorner();
+						break;
+					case 136: // parede inferior esquerda
+						rotate(radians(270));
+						this.drawCorner();
+						break;
+					case 156: // parede inferior direita
+						rotate(radians(180));
+						this.drawCorner();
+						break;
+					case 145: // parede superior direita
+						rotate(radians(90));
+						this.drawCorner();
+						break;
+				}
 			}
 			popMatrix();
 		}
@@ -605,7 +614,9 @@ Pacman.prototype.update = function(data) {
 	for (i = 0; i < adjTile.length; i++) {
 		// remove os tiles parede // 9 é a porta da área de início e a partir do 10 paredes
 		if(adjTile[i].value < 9) {
+			// de a distancia for menor que 3
 			if(distProtPac > 3) {
+				// remove o tile que ele veio
 				if(adjTile[i].dir != oppositeDir[this.lastAct]) {
 					validAdjTile[index] = adjTile[i];
 					validAdjTile[index].dist += adjTile[i].value > 0 ? 2 : 0;
@@ -929,13 +940,17 @@ var educacao = false;
 var pauseMessage = false;
 var score = 0;
 var pauseWarningPrinted = false;
+var mute = false;
 
 var messageCountdown = false;
 var messageStart = 0;
 var messageDuration = 5000;
 
+var paused = false;
 var scene = 'start'; // 'start', 'paused', 'play', 'winner', 'loser'
 
+// setup inicial
+frameRate(30);
 size(tileSize * 31, tileSize * 26);
 background(0);
 PFont fontA = createFont("Press Start 2P");
@@ -1022,15 +1037,43 @@ var pauseButton = new Button({
 	colorActive: defaultColors.yellow,
 	colorHover: defaultColors.yellow,
 	onClick: function() {
-		scene = 'paused';
+		paused = true;
 	}
 });
 
 mouseClicked = function() {
-	if(scene == 'paused') scene = 'play';
+	if(paused) paused = false;
 	if(scene == 'start' || scene == 'winner' || scene == 'loser') startButton.handleMouseClick();
 	if(scene == 'play') pauseButton.handleMouseClick();
 };
+
+keyReleased = function() {
+	// console.debug(key.code);
+	switch (key.code) {
+		case 100: // letra 'd'
+			debug = !debug;
+			break;
+		case 109: // letra 'm'
+			mute = !mute;
+			/*
+			falta implementar o mute
+			*/
+			break;
+		case 122: // letra 'z'
+			/*
+			// colocar uma ação para o boneco, tipo criar uma barricada
+			var protTilePos = protester.getTilePos();
+			*/
+			break;
+		case 112: // letra 'p'
+			paused = !paused;
+			break;
+		case 113: // letra 'q'
+			// exibe apenas o mapa
+			// onlymap = !onlymap;
+			break;
+	}
+}
 
 draw = function() {
 
@@ -1054,18 +1097,14 @@ draw = function() {
 				protester.act = 'right';
 				break;
 		}
-		if(key == 122) { // tecla 'z'
-			/*
-			// colocar uma ação para o boneco, tipo criar uma barricada
-			var protTilePos = protester.getTilePos();
-			*/
-		}
-		if((scene == 'paused' || scene == 'start') && (key == 32 || key == 10)) { // apertar enter ou espaço
+		// iniciar o jogo apertando enter ou espaço
+		if((paused || scene == 'start') && (key == 32 || key == 10)) {
 			scene = 'play';
+			paused = false;
 		}
 	}
 
-	if((!focused && scene != 'start') || scene == 'paused') {
+	if((!focused && scene != 'start') || paused) {
 		if(!pauseWarningPrinted) {
 			fill(0, 150);
 			noStroke();
@@ -1126,7 +1165,7 @@ draw = function() {
 			popMatrix();
 
 			if(messageTime >= messageDuration) {
-				scene = 'play';
+				paused = false;
 				messageCountdown = false;
 			}
 		}
@@ -1150,24 +1189,10 @@ draw = function() {
 			case 'play':
 
 				if(!music.playing()) music.play();
-				background(0);
 
-				// interface
-				pauseButton.draw();
-
-				// display de pontos
-				fill(defaultColors.pink);
-				textSize(16);
-				textAlign(LEFT, TOP);
-				text("-R$" + score + ",00", 4  * tileSize, (maze.tiles.length + 2) * tileSize);
-
-				textSize(8);
-				var countdown = maze.countdown();
-				text(countdown, 2  * tileSize, (maze.tiles.length + 2) * tileSize);
-				if(countdown == 0) {
-					scene = 'loser';
-					if(!soundLose.playing()) soundLose.play();
-				}
+				////////////
+				// LÓGICA //
+				////////////
 
 				// testa a colisao do pacman com tiles e atualiza
 				var pacmanTile = pacman.getTilePos();
@@ -1182,7 +1207,7 @@ draw = function() {
 						soundCoin.play();
 						score += 20000;
 						if(!educacao) {
-							scene = 'paused';
+							paused = true;
 							pauseMessage = 'educacao';
 						}
 						break;
@@ -1191,49 +1216,91 @@ draw = function() {
 						soundCoin.play();
 						score += 20000;
 						if(!saude) {
-							scene = 'paused';
+							paused = true;
 							pauseMessage = 'saude';
 						}
 						break;
 				}
 
-				// debug: colore o quadrado que o pacman está
-				if(debug) {
-					noStroke();
-					fill(255, 50);
-					pushMatrix();
-					translate(pacmanTile.x, pacmanTile.y);
-					rectMode(CORNER);
-					rect(0, 0, this.tileSize, this.tileSize);
-					popMatrix();
-				}
-
 				// velocidade de atualizacao em ms
-				if((millis() - lastUpdate) >= 16) { // 60 fram
-					pacman.update({mazeTiles: maze.tiles, protesterPos: protester.pos});
-					protester.update({mazeTiles: maze.tiles});
-					lastUpdate = millis();
-				}
+				pacman.update({mazeTiles: maze.tiles, protesterPos: protester.pos});
+				protester.update({mazeTiles: maze.tiles});
 
 				if(pacman.hitTest(protester.pos)) {
 					scene = 'winner';
 					if(!soundWin.playing()) soundWin.play();
 				}
 
-				pushMatrix();
-				translate(0, tileSize);
-				maze.draw({
-					pacmanPos: pacman.pos
-				});	
-				pacman.draw();
-				protester.draw();
+				/////////////
+				// DESENHO //
+				/////////////
 
+				// if((millis() - lastUpdate) >= 16) { // 60 fps
+				// if((millis() - lastUpdate) >= 33) { // 30 fps
+				// if((millis() - lastUpdate) >= 42) { // 24 fps
+				// if((millis() - lastUpdate) >= 83) { // 12 fps
+					// lastUpdate = millis();
+				// }
+
+				background(0);
+
+				pushMatrix();
+					translate(0, tileSize);
+					maze.draw();	
+					if(!onlymap) {
+						pacman.draw();
+						protester.draw();
+
+						// debug: colore o quadrado que o pacman está
+						if(debug) {
+							noStroke();
+							fill(defaultColors.pink, 100);
+							rectMode(CORNER);
+
+							// tile do pacman
+							pushMatrix();
+							translate(pacmanTile.x * tileSize, pacmanTile.y * tileSize);
+							rect(0, 0, tileSize, tileSize);
+							popMatrix();
+
+							// tile do protestante
+							protesterTile = protester.getTilePos();
+							pushMatrix();
+							translate(protesterTile.x * tileSize, protesterTile.y * tileSize);
+							rect(0, 0, tileSize, tileSize);
+							popMatrix();
+
+							fill(defaultColors.pink);
+							textSize(8);
+							textAlign(LEFT, BOTTOM);
+							text(frameRate, tileSize, 0);
+						}
+					}
 				popMatrix();
+
+				if(!onlymap) {
+					// interface
+					pauseButton.draw();
+
+					// display de pontos
+					fill(defaultColors.pink);
+					textSize(16);
+					textAlign(LEFT, TOP);
+					text("-R$" + score + ",00", 4  * tileSize, (maze.tiles.length + 2) * tileSize);
+
+					// display de tiles que faltam
+					textSize(8);
+					var countdown = maze.countdown();
+					text(countdown, 2  * tileSize, (maze.tiles.length + 2) * tileSize);
+					if(countdown == 0) {
+						scene = 'loser';
+						if(!soundLose.playing()) soundLose.play();
+					}
+				}
 
 				pauseWarningPrinted = false;
 
 				// pausa o jogo ao clicar 'p'
-				if (keyPressed && key.code == 112) scene = 'paused'; 
 				break;
 
 			case 'loser':
