@@ -101,7 +101,7 @@ Maze.prototype.countdown = function() {
 	var countdown = 0;
 	for (i = 0; i < this.tiles.length; i++) {
 		for (j = 0; j < this.tiles[i].length; j++) {
-			if(this.tiles[i][j] < 10 && this.tiles[i][j] > 0) {
+			if(this.tiles[i][j] < 8 && this.tiles[i][j] > 0) {
 				countdown += 1;
 			}
 		}
