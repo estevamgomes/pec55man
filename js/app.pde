@@ -560,24 +560,73 @@ Pacman.prototype.dist = function(posA, posB) {
 }
 
 // distância levando em conta que no eixo x o mundo é circular
-Pacman.prototype.distX = function(posA, posB, totalSize) {
-	// por causa do túnel preciso considerar a distância como se eles
-	// tivessem andando em sobre uma circuferência
-	var deltaXa = abs(posA.x - posB.x);
-	var deltaXb = totalSize - deltaXa;
-	var deltaX = deltaXa < deltaXb ? deltaXa : deltaXb;
+Pacman.prototype.distX = function(posA, posB, totalSize, loopWorld) {
+	var deltaY = posA.y - posB.y;
+	var deltaX = posA.x - posB.x;
 
-	return sqrt(sq(posA.y - posB.y) + sq(deltaX));
+	if(loopWorld) {
+		// por causa do túnel preciso considerar a distância como se eles
+		// tivessem andando em sobre uma circuferência
+		var deltaXa = abs(posA.x - posB.x);
+		var deltaXb = totalSize - deltaXa;
+		var deltaX = deltaXa < deltaXb ? deltaXa : deltaXb;
+	}
+
+	return sqrt(sq(deltaY) + sq(deltaX));
 }
 
 Pacman.prototype.update = function(data) {
 
-	pacmanTilePos = this.getTilePos();
+	var pacmanTilePos = this.getTilePos();
 	data.tilePos = pacmanTilePos;
-	pacmanTile = this.checkTile(data.mazeTiles, pacmanTilePos);
+	var pacmanTile = this.checkTile(data.mazeTiles, pacmanTilePos);
 
 	var protesterTile = this.getTilePos(data.protesterPos);
+	// distancia do pac man ao protestante
 	var distProtPac = this.dist(pacmanTilePos, protesterTile);
+
+	// o alvo é o protestante
+	var targetTile = protesterTile;
+	var targetRelation = -1; // -1 = afastar, 1 = aproximar // se for do protestante ele se afasta, do dinheiro ele se aproxima
+
+	// se a distancia for maior que 5 o alvo vira  tile com dinheiro mais proximo 0 < x < 7
+	var index = 0;
+	var moneyTile = new Array();
+	if(distProtPac > 3) {
+		for (py = 0; py < data.mazeTiles.length; py++) {
+			for (px = 0; px < data.mazeTiles[py].length; px++) {
+				if(data.mazeTiles[py][px] > 0 && data.mazeTiles[py][px] < 7) {
+					var tilePos = {x: px, y: py};
+					moneyTile[index] = {
+						tilePos: tilePos,
+						dist: this.dist(pacmanTilePos, tilePos),
+					};
+					index++;
+				}
+			}
+		}
+		if(moneyTile.length > 0) {
+			moneyTile.sort(function(a, b) {
+				return ((a.dist > b.dist) - (b.dist > a.dist));
+			});
+			targetTile = moneyTile[0].tilePos;
+			targetRelation = 1;
+		}
+	}
+
+	// desenha um retangulo para ver o alvo
+	if(debug) {
+		rectMode(CORNER);
+		noFill();
+		stroke(this.colors.pink);
+		var strokeW = 1;
+		strokeWeight(strokeW);
+		pushMatrix();
+		translate(0, this.tileSize);
+		translate(targetTile.x * this.tileSize, targetTile.y * this.tileSize);
+		rect(strokeW, strokeW, this.tileSize - strokeW * 2, this.tileSize - strokeW * 2);
+		popMatrix();
+	}
 
 	var oppositeDir = {'up': 'down', 'down': 'up', 'left': 'right', 'right': 'left'};
 
@@ -589,56 +638,50 @@ Pacman.prototype.update = function(data) {
 	var adjTile = [
 		{
 			dir: 'up',
-			dist: this.distX(upTile, protesterTile, data.mazeTiles[0].length),
+			dist: this.dist(upTile, targetTile, data.mazeTiles[0].length, targetRelation > 0 ? false : true),
 			value: this.checkTile(data.mazeTiles, upTile),
 		},
 		{
 			dir: 'down',
-			dist: this.distX(downTile, protesterTile, data.mazeTiles[0].length),
+			dist: this.dist(downTile, targetTile, data.mazeTiles[0].length, targetRelation > 0 ? false : true),
 			value: this.checkTile(data.mazeTiles, downTile),
 		},
 		{
 			dir: 'left',
-			dist: this.distX(leftTile, protesterTile, data.mazeTiles[0].length),
+			dist: this.dist(leftTile, targetTile, data.mazeTiles[0].length, targetRelation > 0 ? false : true),
 			value: this.checkTile(data.mazeTiles, leftTile),
 		},
 		{
 			dir: 'right',
-			dist: this.distX(rightTile, protesterTile, data.mazeTiles[0].length),
+			dist: this.dist(rightTile, targetTile, data.mazeTiles[0].length, targetRelation > 0 ? false : true),
 			value: this.checkTile(data.mazeTiles, rightTile),
 		},
 	];
 
+	// pega apenas os tils válidos, ous seja, os que não são parede
 	var index = 0;
 	var validAdjTile = new Array();
 	for (i = 0; i < adjTile.length; i++) {
 		// remove os tiles parede // 9 é a porta da área de início e a partir do 10 paredes
 		if(adjTile[i].value < 9) {
-			// de a distancia for menor que 3
-			if(distProtPac > 3) {
-				// remove o tile que ele veio
-				if(adjTile[i].dir != oppositeDir[this.lastAct]) {
-					validAdjTile[index] = adjTile[i];
-					validAdjTile[index].dist += adjTile[i].value > 0 ? 2 : 0;
-					index++;
-				} 
-			} else {
+			// só adiciona o tile que ele veio se o pacman estiver muito perto
+			if(distProtPac <= 3 || (distProtPac > 3 && adjTile[i].dir != oppositeDir[this.lastAct])) {
 				validAdjTile[index] = adjTile[i];
-				if(distProtPac > 2) {
-					validAdjTile[index].dist += adjTile[i].value > 0 ? 2 : 0;
-				}
 				index++;
 			}
 		}
 	}
 
-	// checa para ver se o pacman está dentro da área inicial
+
+	// checa para ver se o pacman está fora da área inicial
 	// e checa se ele esta no meio do quadrado
 	if((pacmanTile < 8 || pacmanTile > 9) 
 		&& this.pos.x % this.tileSize == 0 && this.pos.y % this.tileSize == 0) {
 
+		// reordena a lista, caso o alvo seja o dinheiro ele procura o tile mais proximo
+		// caso o alvo seja o jogador ele procura o tile mais longe
 		validAdjTile.sort(function(a, b) {
-			return -1 * ((a.dist > b.dist) - (b.dist > a.dist));
+			return targetRelation * ((a.dist > b.dist) - (b.dist > a.dist));
 		});
 
 		// se a distancia for a mesma de dois tiles
@@ -658,7 +701,6 @@ Pacman.prototype.update = function(data) {
 		} else if(validAdjTile.length > 0) {
 			this.act = validAdjTile[0].dir;
 		}
-
 	}
 
 	data.act = this.act;
@@ -1189,6 +1231,7 @@ draw = function() {
 			case 'play':
 
 				if(!music.playing()) music.play();
+				background(0);
 
 				////////////
 				// LÓGICA //
@@ -1242,7 +1285,6 @@ draw = function() {
 					// lastUpdate = millis();
 				// }
 
-				background(0);
 
 				pushMatrix();
 					translate(0, tileSize);
