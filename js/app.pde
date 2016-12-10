@@ -929,6 +929,11 @@ var educacao = false;
 var pauseMessage = false;
 var score = 0;
 var pauseWarningPrinted = false;
+
+var messageCountdown = false;
+var messageStart = 0;
+var messageDuration = 5000;
+
 var scene = 'start'; // 'start', 'paused', 'play', 'winner', 'loser'
 
 size(tileSize * 31, tileSize * 26);
@@ -1066,7 +1071,7 @@ draw = function() {
 			noStroke();
 			rect(0,0, width, height);
 
-			music.pause();
+			if(!pauseMessage) music.pause();
 
 			textSize(16);
 			fill(defaultColors.blue);
@@ -1083,22 +1088,49 @@ draw = function() {
 			textSize(16);
 			fill(defaultColors.yellow);
 			textAlign(CENTER, TOP);
+
 			switch (pauseMessage) {
 				case 'educacao':
 					text("SE A PEC 55 ESTIVESSE EM VIGOR\n\nENTRE 2002 E 2015, O INVESTIMENTO\n\nEM EDUCAÇÃO SERIA 47% MENOR, OU\n\nSEJA, R$ 268,8 BILHÕES A MENOS.", 0, 0);
 					educacao = true;
 					pauseMessage = false;
+
+					messageStart = millis();
+					messageCountdown = true;
+
 					break;
 				case 'saude':
 					text("COM A PEC 55, ESTIMA-SE QUE A\n\nSAÚDE PÚBLICA DEIXARIA DE\n\nRECEBER R$ 424 BILHÕES NOS\n\nPRÓXIMOS 20 ANOS.", 0, 0);
 					saude = true;
 					pauseMessage = false;
+
+					messageStart = millis();
+					messageCountdown = true;
 					break;
 			}
 			popMatrix();
-
 			pauseWarningPrinted = true;
 		}
+
+		// timer que conta o tempo que a mensagem está aparecendo
+		if(messageCountdown) {
+			var messageTime = millis() - messageStart;
+			pushMatrix();
+			stroke(0);
+			translate(width/2, height / 2 + tileSize * 4);
+			ellipseMode(CENTER);
+			fill(defaultColors.yellow);
+			ellipse(0, 0, 38, 38);
+			fill(0);
+			arc(0, 0, 40, 40, -PI * messageTime / messageDuration, PI * messageTime / messageDuration);
+			popMatrix();
+
+			if(messageTime >= messageDuration) {
+				scene = 'play';
+				messageCountdown = false;
+			}
+		}
+
 	} else {
 		switch(scene) {
 			case 'start':
