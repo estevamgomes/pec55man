@@ -53,6 +53,18 @@ var Maze = function(config) {
 		return obj;
 	}
 	this.tiles = this.copyTiles(this.maze01);
+	this.countdown = function() {
+		var countdown = 0;
+		for (i = 0; i < this.tiles.length; i++) {
+			for (j = 0; j < this.tiles[i].length; j++) {
+				if(this.tiles[i][j] < 8 && this.tiles[i][j] > 0) {
+					countdown += 1;
+				}
+			}
+		}
+		return countdown;
+	}
+	this.maxPoints = this.countdown();
 
 	// funcoes para desenhar o tabuleiro
 	this.strkW = 2; // espessura da linha da parede
@@ -98,18 +110,6 @@ var Maze = function(config) {
 
 Maze.prototype.restart = function(data) {
 	this.tiles = this.copyTiles(this.maze01);
-}
-
-Maze.prototype.countdown = function() {
-	var countdown = 0;
-	for (i = 0; i < this.tiles.length; i++) {
-		for (j = 0; j < this.tiles[i].length; j++) {
-			if(this.tiles[i][j] < 8 && this.tiles[i][j] > 0) {
-				countdown += 1;
-			}
-		}
-	}
-	return countdown;
 }
 
 Maze.prototype.updateTile = function(tilex, tiley, value) {
@@ -1337,6 +1337,9 @@ draw = function() {
 					if(countdown == 0) {
 						scene = 'loser';
 						if(!soundLose.playing()) soundLose.play();
+					}
+					if(countdown < maze.maxPoints / 4) {
+						music.rate(1.1);
 					}
 				}
 
