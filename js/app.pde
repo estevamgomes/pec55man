@@ -1338,8 +1338,10 @@ draw = function() {
 						scene = 'loser';
 						if(!soundLose.playing()) soundLose.play();
 					}
-					if(countdown < maze.maxPoints / 4) {
+					if(countdown != 0 && countdown < maze.maxPoints / 4) {
 						music.rate(1.1);
+					} else {
+						music.rate(1);
 					}
 				}
 
