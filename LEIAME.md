@@ -1,4 +1,4 @@
-[English](README.md) | Português]
+[English](README.md) | Português
 
 ![PEC-55-Man](title.png "PEC-55-Man")
 
