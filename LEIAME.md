@@ -1,6 +1,8 @@
 [English](README.md) | Português]
 
-# ![PEC-55-Man](title.png "PEC-55-Man")
+![PEC-55-Man](title.png "PEC-55-Man")
+
+# PEC-55-Man
 
 Jogo no qual você controla um manifestante que deve derrotar o PEC-55-Man, inspirado no clássico Pac-Man.
 
