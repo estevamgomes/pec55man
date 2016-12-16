@@ -1,6 +1,8 @@
 English | [Português](LEIAME.md)
 
-# ![PEC-55-Man](title.png "PEC-55-Man")
+![PEC-55-Man](title.png "PEC-55-Man")
+
+# PEC-55-Man
 
 Game in which you control a protester who must defeat PEC-55-Man, inspired by the classic Pac-Man.
 
