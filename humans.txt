@@ -3,13 +3,11 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
-
-# THANKS
-
-    <name>
+	Your title: Estevam Gomes
+	Site: www.estevamgomes.com.br
+	Location: Belo Horizonte, Brasil
 
 # TECHNOLOGY COLOPHON
 
     CSS3, HTML5
-    Apache Server Configs, jQuery, Modernizr, Normalize.css
+    Apache Server Configs, Normalize.css, Processingjs
